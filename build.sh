@@ -18,7 +18,7 @@ fi
 
 echo "build rpm ..."
 cargo install cargo-generate-rpm
-cargo generate-rpm
+cargo generate-rpm --payload-compress none
 
 if [[ $? == 0 ]]; then
     echo "rpm build successful"
