@@ -36,6 +36,9 @@ cd proxmox-backup
 git checkout v2.4.1
 cd -
 git clone git://git.proxmox.com/git/proxmox.git
+cd proxmox
+git checkout 32e7d3ccdfd2702dcceea312a6caee7b1565030a
+cd -
 git clone git://git.proxmox.com/git/proxmox-fuse.git
 git clone git://git.proxmox.com/git/pxar.git
 cd pxar
