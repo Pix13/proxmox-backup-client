@@ -25,16 +25,22 @@
 # export OPENSSL_INCLUDE_DIR=/usr/include/openssl11/
 # export OPENSSL_LIB_DIR=/usr/lib64/openssl11/
 
-echo "READ THE REQUIREMENTS UP THERE AND COMMENT THE EXIT"
-exit 1
+#echo "READ THE REQUIREMENTS UP THERE AND COMMENT THE EXIT"
+#exit 1
 
 
 # This is bullshit as we don't choose the tags or anything else
 echo "cloning Proxmox repositories ..."
 git clone git://git.proxmox.com/git/proxmox-backup.git
+cd proxmox-backup
+git checkout v2.4.1
+cd -
 git clone git://git.proxmox.com/git/proxmox.git
 git clone git://git.proxmox.com/git/proxmox-fuse.git
 git clone git://git.proxmox.com/git/pxar.git
+cd pxar
+git checkout 729281cd932dd6fd43dcc3539ac48d7d734a55c2
+cd -
 echo "done"
 
 echo "patching Cargo.toml ..."
