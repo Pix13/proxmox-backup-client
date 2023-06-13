@@ -1,0 +1,61 @@
+diff --git a/Cargo.toml b/Cargo.toml
+index 9123af5..1ea35d4 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -45,6 +45,7 @@ crc32fast = "1"
+ endian_trait = "0.6"
+ flate2 = "1.0"
+ futures = "0.3"
++getrandom = "0.1.14"
+ handlebars = "3.0"
+ hex = "0.4"
+ http = "0.2"
+diff --git a/proxmox-sys/Cargo.toml b/proxmox-sys/Cargo.toml
+index 2b44bd0..f12fcca 100644
+--- a/proxmox-sys/Cargo.toml
++++ b/proxmox-sys/Cargo.toml
+@@ -20,6 +20,7 @@ regex.workspace = true
+ serde_json.workspace = true
+ serde = { workspace = true, features = [ "derive" ] }
+ zstd = { workspace = true, optional = true}
++getrandom = "0.1.14"
+ 
+ proxmox-io.workspace = true
+ proxmox-lang.workspace = true
+diff --git a/proxmox-sys/src/linux/mod.rs b/proxmox-sys/src/linux/mod.rs
+index e150254..94b6914 100644
+--- a/proxmox-sys/src/linux/mod.rs
++++ b/proxmox-sys/src/linux/mod.rs
+@@ -1,6 +1,7 @@
+ //! Linux specific helpers and syscall wrapper
+ 
+ use anyhow::{bail, Error};
++use getrandom::getrandom;
+ 
+ use proxmox_io::vec;
+ 
+@@ -25,22 +26,8 @@ pub fn random_data(size: usize) -> Result<Vec<u8>, Error> {
+ ///
+ /// This code uses the Linux syscall getrandom() - see "man 2 getrandom".
+ pub fn fill_with_random_data(buffer: &mut [u8]) -> Result<(), Error> {
+-    let res = unsafe {
+-        libc::getrandom(
+-            buffer.as_mut_ptr() as *mut libc::c_void,
+-            buffer.len() as libc::size_t,
+-            0_u32,
+-        )
+-    };
+-
+-    if res == -1 {
+-        return Err(std::io::Error::last_os_error().into());
+-    }
+-
+-    if res as usize != buffer.len() {
+-        // should not happen
+-        bail!("short getrandom read");
+-    }
++
++    getrandom(buffer)?;
+ 
+     Ok(())
+ }
